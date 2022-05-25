@@ -1,0 +1,29 @@
+{
+  "name": "LoadToTsubasa",
+  "version": "1.0.0",
+  "private": true,
+  "license": "proprietary",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@creativebulma/bulma-divider": "^1.1.0",
+    "axios": "^0.27.2",
+    "bulma": "^0.9.4",
+    "core-js": "^3.19.3",
+    "nuxt": "^2.15.8",
+    "sass": "^1.51.0",
+    "vue": "^2.6.14",
+    "vue-server-renderer": "^2.6.14",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^4.46.0"
+  },
+  "devDependencies": {
+    "@nuxt/types": "^2.15.8",
+    "@nuxt/typescript-build": "^2.1.0",
+    "sass-loader": "10"
+  }
+}

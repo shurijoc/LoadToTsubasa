@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+@import "bulma/bulma.sass";
+@import "~@creativebulma/bulma-divider";
+@import "~assets/scss/bulma-extension.scss";
+@import "~assets/scss/circular-progress-bar.scss";
+
+/* フェードイン・フェードアウト中の設定 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+/* フェードイン開始時・フェードアウト終了時の設定 */
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
