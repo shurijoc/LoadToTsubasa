@@ -1,41 +1,22 @@
 require 'json'
 require 'aws-sdk-dynamodb'
 require 'twilio-ruby'
-require './tld'
 require './http_request'
 
 ## CalledTels
-# - AttributeName: url
+# - AttributeName: tel
 #   AttributeType: S
-# - AttributeName: title
-#   AttributeType: S
-# - AttributeName: page_num
-#   AttributeType: N
-# - AttributeName: height
-#   AttributeType: N
 # - AttributeName: created_at
 #   AttributeType: S
 
-## CurrentStatuses
-# - AttributeName: id
-#   AttributeType: S
-# - AttributeName: letter 初期値は ` を使う（nextがaのため）
-#   AttributeType: S
-# - AttributeName: tld_index
-#   AttributeType: N
-# - AttributeName: total_page_num
-#   AttributeType: N
-# - AttributeName: current_page_num
-#   AttributeType: N
-
-## TwitterStatuses
-# - AttributeName: id
-#   AttributeType: S
-# - AttributeName: tweet_num
-#   AttributeType: S
+## Statuses
+# - id: S
+# - totalYes: N
+# - calling: N(0 or 1)
+# - currentTel: S
 
 def current_tel(event:, context:)
-  current_status = list_items('CurrentStatuses').first
+  current_status = list_items('Statuses').first
 
   body = {
     current_status: current_status
@@ -48,7 +29,7 @@ def total_tel(event:, context:)
   @count ||= count_item('CalledTels')['Count']
 
   body = {
-    count: @count
+    total_tel: @count
   }
 
   response(body: body)
@@ -63,7 +44,7 @@ def tels(event:, context:)
 end
 
 def calling(event:, context:)
-  status = list_items('CurrentStatuses').first
+  status = list_items('Statuses').first
   current_letter = status['letter']
   next_letter = current_letter.next
   tld_index = status['tld_index']
@@ -86,15 +67,11 @@ def tel_present?(url)
   HttpRequest.get(url)
 end
 
-def last_letter?(current_letter)
-  current_letter.split('').all? { |s| s == "z" }
-end
-
 def add_item(table, event)
   dynamodb_table(table).put_item({ item: event })
 end
 
-def increment_tld_index(tld_index)
+def increment_tel(tel)
   key = { 'id': 1.to_s }
 
   attributes = {
@@ -106,7 +83,7 @@ def increment_tld_index(tld_index)
       ":tld_index": tld_index + 1,
     }
   }
-  update_item('CurrentStatuses', key, attributes)
+  update_item('Statuses', key, attributes)
 end
 
 def update_item(table, key, attributes)
@@ -132,18 +109,22 @@ def count_item(table)
   dynamodb_table(table).scan({ select: 'COUNT' })
 end
 
-def twilio_calling
+def twilio_calling(to)
   account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" # Your Test Account SID from www.twilio.com/console/settings
   auth_token = "your_auth_token"   # Your Test Auth Token from www.twilio.com/console/settings
 
-  @client = Twilio::REST::Client.new account_sid, auth_token
-  message = @client.messages.create(
-    body: "Hello from Ruby",
-    to: "+12345678901",    # Replace with your phone number
-    from: "+15005550006")  # Use this Magic Number for creating SMS
-  # Gatherを使う
+  response = Twilio::TwiML::VoiceResponse.new(account_sid, auth_token) do |r|
+    r.gather numDigits: 1 do |g|
+      g.say(
+        message: 'For sales, press 1. For support, press 2.',
+        to: "+81#{to}", # Replace with your phone number
+        from: "+15005550006" # Use this Magic Number for creating SMS
+      )
+    end
+    r.redirect('/voice')
+  end
 
-  puts message.sid
+  puts response
 end
 
 # params = event.get('queryStringParameters') # パラメータ取得
