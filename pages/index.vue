@@ -29,7 +29,9 @@
 
     <transition name="fade">
       <Splash
-          v-if="!checked"
+        v-if="!checked"
+        @showDashboard='showDashboard'
+        checked: checked
       />
     </transition>
   </div>
@@ -43,30 +45,12 @@ export default Vue.extend({
   data () {
     return {
       checked: false,
-      height: 0,
-      dots: ''
     }
-  },
-  mounted () {
-    this.handleResize()
-    window.addEventListener('resize', this.handleResize)
-    setTimeout(this.show, 5000)
-    setInterval(this.handleDots, 500)
   },
   methods: {
-    show () {
+    showDashboard () {
       this.checked = true
     },
-    handleResize () {
-      this.height = window.innerHeight
-    },
-    handleDots () {
-      if (this.dots === '...') {
-        this.dots = '.'
-      } else {
-        this.dots += '.'
-      }
-    }
   }
 })
 </script>
