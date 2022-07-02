@@ -31,9 +31,8 @@ provider:
           Action:
             - 'dynamodb:*'
           Resource:
-            - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/CrawledSites"
+            - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/CalledTels"
             - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/CurrentStatuses"
-            - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/TwitterStatuses"
 
 # you can overwrite defaults here
 #  stage: dev
@@ -76,17 +75,17 @@ functions:
       - httpApi:
           path: /current_status
           method: get
-  total_site:
-    handler: handler.total_site
+  total_tel:
+    handler: handler.total_tel
     events:
       - httpApi:
-          path: /total_site
+          path: /total_tel
           method: get
-  sites:
-    handler: handler.sites
+  tels:
+    handler: handler.tels
     events:
       - httpApi:
-          path: /sites
+          path: /tels
           method: get
   crawling:
     handler: handler.crawling
@@ -147,7 +146,7 @@ resources:
     crawledSitesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: CrawledSites
+        TableName: CurrentTels
         AttributeDefinitions:
           - AttributeName: url
             AttributeType: S
@@ -161,19 +160,6 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: CurrentStatuses
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-    twitterStatusesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: TwitterStatuses
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S

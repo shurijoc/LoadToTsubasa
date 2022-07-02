@@ -1,9 +1,10 @@
 require 'json'
 require 'aws-sdk-dynamodb'
+require 'twilio-ruby'
 require './tld'
 require './http_request'
 
-## CrawledSites
+## CalledTels
 # - AttributeName: url
 #   AttributeType: S
 # - AttributeName: title
@@ -33,7 +34,7 @@ require './http_request'
 # - AttributeName: tweet_num
 #   AttributeType: S
 
-def current_site(event:, context:)
+def current_tel(event:, context:)
   current_status = list_items('CurrentStatuses').first
 
   body = {
@@ -43,8 +44,8 @@ def current_site(event:, context:)
   response(body: body)
 end
 
-def total_site(event:, context:)
-  @count ||= count_item('CrawledSites')['Count']
+def total_tel(event:, context:)
+  @count ||= count_item('CalledTels')['Count']
 
   body = {
     count: @count
@@ -53,15 +54,15 @@ def total_site(event:, context:)
   response(body: body)
 end
 
-def sites(event:, context:)
+def tels(event:, context:)
   body = {
-    sites: list_items('CrawledSites').items
+    tels: list_items('CalledTels').items
   }
 
   response(body: body)
 end
 
-def crawling(event:, context:)
+def calling(event:, context:)
   status = list_items('CurrentStatuses').first
   current_letter = status['letter']
   next_letter = current_letter.next
@@ -81,7 +82,7 @@ def response(body:, status_code: 200)
   }
 end
 
-def site_present?(url)
+def tel_present?(url)
   HttpRequest.get(url)
 end
 
@@ -129,6 +130,20 @@ end
 
 def count_item(table)
   dynamodb_table(table).scan({ select: 'COUNT' })
+end
+
+def twilio_calling
+  account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" # Your Test Account SID from www.twilio.com/console/settings
+  auth_token = "your_auth_token"   # Your Test Auth Token from www.twilio.com/console/settings
+
+  @client = Twilio::REST::Client.new account_sid, auth_token
+  message = @client.messages.create(
+    body: "Hello from Ruby",
+    to: "+12345678901",    # Replace with your phone number
+    from: "+15005550006")  # Use this Magic Number for creating SMS
+  # Gatherを使う
+
+  puts message.sid
 end
 
 # params = event.get('queryStringParameters') # パラメータ取得

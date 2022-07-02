@@ -28,15 +28,9 @@
     </transition>
 
     <transition name="fade">
-      <div
-        v-if="!checked"
-        :style="`height: ${height}px;`"
-        class="if-full has-background-success is-flex is-justify-content-center is-align-items-center"
-        >
-        <div>
-          <h1 class="title has-text-white">本田翼を見つけるために電話中{{dots}}</h1>
-        </div>
-      </div>
+      <Splash
+          v-if="!checked"
+      />
     </transition>
   </div>
 </template>
