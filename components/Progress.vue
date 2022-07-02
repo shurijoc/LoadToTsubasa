@@ -6,8 +6,8 @@
           <div class="progress-inner">
             <p class="is-size-6 has-text-grey mb-0">電話した件数</p>
             <p class="mb-0 is-size-3">
-              100
-              <span class="is-size-7">件</span>
+              {{ progress }}
+              <span class="is-size-6">件</span>
             </p>
           </div>
         </div>
@@ -18,6 +18,11 @@
 
 <script>
 export default {
-  name: 'Progress'
+  name: 'Progress',
+  data () {
+    return {
+      progress: 100,
+    }
+  },
 }
 </script>
