@@ -62,5 +62,5 @@ serverless deploy function -f <yourfunction>
 - { total_yes: 100 } を返す
 
 #### 電話した件数
-- dynamoのtotalYesの数を取得する
-- { progress: 100 } を返す
+- dynamoのprogressの数を取得する
+- { total_tel: 100 } を返す
