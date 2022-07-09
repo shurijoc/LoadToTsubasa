@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-loadtotsubasa-dev-163021-authRole",
+      "UnauthRoleArn": "arn:aws:iam::678802818137:role/amplify-loadtotsubasa-dev-163021-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::678802818137:role/amplify-loadtotsubasa-dev-163021-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-loadtotsubasa-dev-163021-deployment",
+      "UnauthRoleName": "amplify-loadtotsubasa-dev-163021-unauthRole",
+      "StackName": "amplify-loadtotsubasa-dev-163021",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:678802818137:stack/amplify-loadtotsubasa-dev-163021/d57576a0-f9d8-11ec-a8f2-0e855dc64cd7",
+      "AmplifyAppId": "d1evpffsmyumau"
+    }
+  }
+}
